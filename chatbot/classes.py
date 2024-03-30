@@ -1,7 +1,5 @@
 import re
 from collections import UserDict
-from typing import Tuple, Any
-
 from chatbot.constants import LEVEL_WARNING, PHONE_WRONG_FORMAT, LEVEL_ERROR, NOT_FOUND, GIVE_PHONE
 
 

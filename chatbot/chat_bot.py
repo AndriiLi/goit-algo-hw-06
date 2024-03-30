@@ -1,6 +1,6 @@
 from colorama import Fore
 
-from chatbot.classes import AddressBook, Record
+from chatbot.classes import AddressBook
 from chatbot.command_parser import parse_input
 from chatbot.command_handlers import add_contact, change_phone, all_contacts, export_contacts, \
     import_contacts, delete_contact, find_contact_by_name, find_contact_by_phone, add_phone, del_phone

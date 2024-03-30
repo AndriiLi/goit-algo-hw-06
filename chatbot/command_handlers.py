@@ -2,7 +2,7 @@ from pathlib import Path
 
 from chatbot.classes import AddressBook, Record, Name, Phone
 from chatbot.command_parser import read_file
-from chatbot.constants import DB_PATH, LEVEL_WARNING, LEVEL_ERROR, NOT_FOUND
+from chatbot.constants import DB_PATH, LEVEL_WARNING
 from chatbot.decorators import check_edit_phone_error, \
     check_empty_contacts_error, check_file_exists, check_add_contacts_error, check_show_phone_error, \
     check_delete_contact_error, check_search_contact_error
