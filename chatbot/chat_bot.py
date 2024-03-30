@@ -3,7 +3,7 @@ from colorama import Fore
 from chatbot.classes import AddressBook, Record
 from chatbot.command_parser import parse_input
 from chatbot.command_handlers import add_contact, change_phone, all_contacts, export_contacts, \
-    import_contacts, delete_contact, find_contact_by_name, find_contact_by_phone
+    import_contacts, delete_contact, find_contact_by_name, find_contact_by_phone, add_phone, del_phone
 from chatbot.constants import LEVEL_ERROR, LEVEL_WARNING, MESSAGE_LEVELS, INVALID_COMMAND
 
 
@@ -48,6 +48,10 @@ def run_chat_bot() -> None:
                     print_colored(delete_contact(args=args, address_book=address_book))
                 case "change":
                     print_colored(change_phone(args=args, address_book=address_book))
+                case "addphone":
+                    print_colored(add_phone(args=args, address_book=address_book))
+                case "delphone":
+                    print_colored(del_phone(args=args, address_book=address_book))
                 case "all":
                     print_colored(all_contacts(address_book=address_book))
                 case "save":
@@ -55,7 +59,7 @@ def run_chat_bot() -> None:
                 case "load":
                     print_colored(import_contacts(address_book=address_book))
                 case _:
-                    print_colored(LEVEL_ERROR + " " + INVALID_COMMAND)
+                    raise ValueError(LEVEL_ERROR + " " + INVALID_COMMAND)
 
         except Exception as e:
             print_colored(e)

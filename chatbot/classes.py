@@ -54,20 +54,22 @@ class Record:
     def add_phone(self, phone: str) -> None:
         self.phones.append(Phone(phone))
 
-    def remove_phone(self, phone: str) -> None:
-        self.phones = [Phone(p) for p in self.phones if p.value != phone]
+    def remove_phone(self, phone: Phone) -> None:
+        self.phones = [p for p in self.phones if p.value != phone.value]
 
     def edit_phone(self, old_phone: str, new_phone: str) -> None:
         index = self.get_phone_index(old_phone)
         if index is None:
             raise ValueError(f"{LEVEL_WARNING} Contact doesn't have phone number {old_phone},"
-                             f" now this changing is impossible, "
                              f" input valid number which you want change")
 
         self.phones[index] = Phone(new_phone)
 
     def get_phones(self, separator: str = ', ') -> str:
         return separator.join(p.value for p in self.phones)
+
+    def is_exists(self, phone: Phone) -> bool:
+        return phone.value in [p.value for p in self.phones]
 
     def __str__(self) -> str:
         return f"Contact name: {self.name.value} phones: {self.get_phones()}"
@@ -78,10 +80,7 @@ class AddressBook(UserDict):
         self.data[record.name.value] = record
 
     def find_record_by_name(self, name: str) -> Record:
-        res = self.data.get(name.capitalize())
-        if not res:
-            raise ValueError(LEVEL_ERROR + ' ' + NOT_FOUND)
-        return res
+        return self.data.get(name.capitalize())
 
     def find_record_by_phone(self, phone: str) -> Record:
         phone = Phone(phone)

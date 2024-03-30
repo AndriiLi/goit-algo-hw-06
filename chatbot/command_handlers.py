@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from chatbot.classes import AddressBook, Record
+from chatbot.classes import AddressBook, Record, Name, Phone
 from chatbot.command_parser import read_file
-from chatbot.constants import DB_PATH
+from chatbot.constants import DB_PATH, LEVEL_WARNING
 from chatbot.decorators import check_edit_phone_error, \
     check_empty_contacts_error, check_file_exists, check_add_contacts_error, check_show_phone_error, \
     check_delete_contact_error, check_search_contact_error
@@ -11,8 +11,12 @@ from chatbot.decorators import check_edit_phone_error, \
 @check_add_contacts_error
 def add_contact(args: tuple[str, str], address_book: AddressBook) -> str:
     record = Record(args[0].strip())
-    record.add_phone(args[1].strip())
+    phone = args[1].strip()
 
+    if address_book.find_record_by_name(record.name.value):
+        raise ValueError(LEVEL_WARNING + ' Contact is already exists')
+
+    record.add_phone(phone)
     address_book.add_record(record)
     return "Contact added."
 
@@ -50,6 +54,36 @@ def change_phone(args: tuple[str, str, str], address_book: AddressBook) -> str:
     record.edit_phone(args[1].strip(), args[2].strip())
 
     return "Contact updated."
+
+
+@check_add_contacts_error
+def add_phone(args: tuple[str, str], address_book: AddressBook) -> str:
+    name = args[0].strip()
+    phone = args[1].strip()
+    record = address_book.find_record_by_name(name)
+
+    if not record:
+        raise ValueError(LEVEL_WARNING + " Contact doesn't exists, add contact before")
+
+    if record.is_exists(Phone(phone)):
+        raise ValueError(LEVEL_WARNING + ' Contact already has this phone number')
+
+    record.add_phone(phone)
+    return "Phone added."
+
+
+@check_add_contacts_error
+def del_phone(args: tuple[str, str], address_book: AddressBook) -> str:
+    name = Name(args[0].strip())
+    phone = Phone(args[1].strip())
+    record = address_book.find_record_by_name(name.value)
+
+    if record.is_exists(phone) is False:
+        raise ValueError(LEVEL_WARNING + " Contact doesn't have this phone number")
+
+    record.remove_phone(phone)
+    address_book.data[name.value] = record
+    return "Phone deleted."
 
 
 @check_file_exists
