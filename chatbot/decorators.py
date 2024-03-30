@@ -1,15 +1,12 @@
 from chatbot.constants import LEVEL_ERROR, LEVEL_WARNING, GIVE_NAME_PHONE, GIVE_PHONE, GIVE_NAME, NOT_FOUND, \
-    INPUT_PHONE_FOR_CHANGE, INPUT_NEW_PHONE
+    GIVE_NAME_OLD_PHONE_NEW_PHONE
 
 
 def check_add_contacts_error(func):
     def inner(*args, **kwargs):
         try:
-            if len(kwargs['args']) == 0:
+            if len(kwargs['args']) < 2:
                 raise ValueError(LEVEL_ERROR + " " + GIVE_NAME_PHONE)
-
-            if len(kwargs['args']) == 1:
-                raise ValueError(LEVEL_ERROR + " " + GIVE_PHONE)
 
             return func(*args, **kwargs)
 
@@ -56,14 +53,8 @@ def check_empty_contacts_error(func):
 def check_edit_phone_error(func):
     def inner(*args, **kwargs):
         try:
-            if len(kwargs['args']) == 0:
-                raise ValueError(LEVEL_ERROR + ' ' + GIVE_NAME)
-
-            if len(kwargs['args']) == 1:
-                raise ValueError(LEVEL_ERROR + ' ' + INPUT_PHONE_FOR_CHANGE)
-
-            if len(kwargs['args']) == 2:
-                raise ValueError(LEVEL_ERROR + ' ' + INPUT_NEW_PHONE)
+            if len(kwargs['args']) < 3:
+                raise ValueError(LEVEL_ERROR + ' ' + GIVE_NAME_OLD_PHONE_NEW_PHONE)
 
             return func(*args, **kwargs)
 
