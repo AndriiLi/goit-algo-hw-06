@@ -2,7 +2,7 @@ from pathlib import Path
 
 from chatbot.classes import AddressBook, Record, Name, Phone
 from chatbot.command_parser import read_file
-from chatbot.constants import DB_PATH, LEVEL_WARNING
+from chatbot.constants import DB_PATH, LEVEL_WARNING, LEVEL_ERROR, NOT_FOUND
 from chatbot.decorators import check_edit_phone_error, \
     check_empty_contacts_error, check_file_exists, check_add_contacts_error, check_show_phone_error, \
     check_delete_contact_error, check_search_contact_error
@@ -13,7 +13,7 @@ def add_contact(args: tuple[str, str], address_book: AddressBook) -> str:
     record = Record(args[0].strip())
     phone = args[1].strip()
 
-    if address_book.find_record_by_name(record.name.value):
+    if address_book.data.get(record.name.value) is not None:
         raise ValueError(LEVEL_WARNING + ' Contact is already exists')
 
     record.add_phone(phone)
@@ -61,9 +61,6 @@ def add_phone(args: tuple[str, str], address_book: AddressBook) -> str:
     name = args[0].strip()
     phone = args[1].strip()
     record = address_book.find_record_by_name(name)
-
-    if not record:
-        raise ValueError(LEVEL_WARNING + " Contact doesn't exists, add contact before")
 
     if record.is_exists(Phone(phone)):
         raise ValueError(LEVEL_WARNING + ' Contact already has this phone number')

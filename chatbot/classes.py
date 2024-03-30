@@ -44,7 +44,7 @@ class Record:
         self.name: Name = Name(name)
         self.phones: list[Phone] = []
 
-    def get_phone_index(self, phone) -> int | None:
+    def get_phone_index(self, phone: str) -> int | None:
         search = Phone(phone)
         for idx, p in enumerate(self.phones):
             if p.value == search.value:
@@ -80,7 +80,11 @@ class AddressBook(UserDict):
         self.data[record.name.value] = record
 
     def find_record_by_name(self, name: str) -> Record:
-        return self.data.get(name.capitalize())
+        found = self.data.get(name.capitalize())
+        if found is None:
+            raise ValueError(LEVEL_ERROR + ' ' + NOT_FOUND)
+
+        return found
 
     def find_record_by_phone(self, phone: str) -> Record:
         phone = Phone(phone)
